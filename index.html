@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Точка Счастья — Питч</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #0D0D0D;
+      --dark:     #1A1A1A;
+      --gold:     #C8A96E;
+      --milk:     #F5F2ED;
+      --white:    #FFFFFF;
+      --dim:      rgba(255,255,255,0.42);
+      --max:      860px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      font-size: 15px;
+      line-height: 1.7;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Typography ──────────────────────────────────── */
+
+    .label {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    h1 {
+      font-size: clamp(30px, 5vw, 56px);
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+    }
+
+    h2 {
+      font-size: clamp(24px, 3.2vw, 38px);
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+
+    p { color: rgba(255,255,255,0.80); }
+
+    .thesis {
+      font-size: clamp(15px, 1.8vw, 18px);
+      line-height: 1.65;
+      color: rgba(255,255,255,0.72);
+      max-width: 660px;
+    }
+
+    blockquote {
+      border-left: 0.5px solid var(--gold);
+      padding-left: 20px;
+      margin: 28px 0;
+      font-style: italic;
+      font-size: 14px;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.7;
+    }
+
+    blockquote cite {
+      display: block;
+      margin-top: 8px;
+      font-style: normal;
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.06em;
+    }
+
+    hr {
+      border: none;
+      border-top: 0.5px solid rgba(255,255,255,0.10);
+      margin: 52px 0;
+    }
+
+    /* ─── Layout ──────────────────────────────────────── */
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .gold-rule {
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    /* ─── Hero ────────────────────────────────────────── */
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-top: 52px;
+      padding-bottom: 72px;
+      background: var(--black) center/cover no-repeat;
+      /* HERO IMAGE → укажи путь: style="background-image:url('images/hero.jpg')" */
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,13,13,.98) 0%, rgba(13,13,13,.30) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      min-height: calc(100vh - 124px);
+    }
+
+    .hero-phrase {
+      font-size: clamp(28px, 4.2vw, 54px);
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .hero .label { margin-bottom: 28px; }
+
+    .hero h1 { max-width: 600px; margin-bottom: 28px; }
+
+    .hero-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.50);
+      max-width: 420px;
+      line-height: 1.6;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 44px;
+      margin-top: 52px;
+    }
+
+    .meta-item { display: flex; flex-direction: column; gap: 3px; }
+
+    .meta-val {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .meta-key {
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.07em;
+    }
+
+    /* ─── Sections ────────────────────────────────────── */
+
+    .sec {
+      position: relative;
+      padding: 120px 0;
+      background: var(--black) center/contain no-repeat fixed;
+    }
+
+    .sec.alt { background-color: var(--dark); }
+
+    .sec-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(13,13,13,.80);
+    }
+
+    .sec-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .sec-head {
+      margin-bottom: 60px;
+    }
+
+    .sec-head .label { margin-bottom: 18px; }
+
+    .sec-head h2 { margin-bottom: 20px; }
+
+    /* ─── Sub-blocks ──────────────────────────────────── */
+
+    .sub { margin-top: 48px; }
+
+    .sub-lbl {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .sub h3 { margin-bottom: 12px; }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 52px 60px;
+      margin-top: 52px;
+    }
+
+    /* ─── References ──────────────────────────────────── */
+
+    .ref-card {
+      padding: 40px 0;
+      border-top: 0.5px solid rgba(255,255,255,0.09);
+    }
+
+    .ref-card:last-child {
+      border-bottom: 0.5px solid rgba(255,255,255,0.09);
+    }
+
+    .ref-head {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .ref-head h3 { font-size: 16px; }
+
+    .ref-meta {
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.06em;
+    }
+
+    .ref-lbl {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      color: var(--dim);
+      margin: 20px 0 10px;
+    }
+
+    .take-list { list-style: none; }
+
+    .take-list li {
+      position: relative;
+      padding-left: 16px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.68);
+      padding: 3px 0 3px 16px;
+    }
+
+    .take-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    .ref-link {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      opacity: 0.65;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+
+    .ref-link:hover { opacity: 1; }
+
+    /* ─── Final ───────────────────────────────────────── */
+
+    .final {
+      position: relative;
+      padding: 160px 0;
+      text-align: center;
+      background: var(--black) center/contain no-repeat fixed;
+    }
+
+    .final .gold-rule { margin: 0 auto 44px; }
+
+    .final-quote {
+      font-size: clamp(18px, 2.4vw, 26px);
+      font-weight: 400;
+      letter-spacing: -0.3px;
+      line-height: 1.5;
+      max-width: 580px;
+      margin: 0 auto;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .final-attr {
+      margin-top: 40px;
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .final-contacts {
+      margin-top: 52px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .final-contacts a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color .2s;
+    }
+
+    .final-contacts a:hover { color: var(--gold); }
+
+    /* ─── Audio ──────────────────────────────────────── */
+
+    .audio-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 100;
+      width: 36px;
+      height: 36px;
+      border: 0.5px solid rgba(255,255,255,0.18);
+      border-radius: 50%;
+      background: rgba(13,13,13,0.72);
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.5;
+      transition: opacity .2s;
+    }
+
+    .audio-btn:hover { opacity: 1; }
+
+    .audio-btn svg { width: 14px; height: 14px; fill: var(--white); }
+
+    /* ─── Scroll cue ──────────────────────────────────── */
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .scroll-cue span {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 0.5px;
+      height: 44px;
+      background: var(--white);
+      transform-origin: top;
+      animation: line 2s ease-in-out infinite;
+    }
+
+    @keyframes line {
+      0%   { transform: scaleY(0); transform-origin: top;    }
+      49%  { transform: scaleY(1); transform-origin: top;    }
+      50%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ─── Responsive ──────────────────────────────────── */
+
+    @media (max-width: 640px) {
+      .grid2       { grid-template-columns: 1fr; gap: 40px; }
+      .hero-meta   { flex-wrap: wrap; gap: 24px; }
+      .sec         { padding: 80px 0; }
+      .final       { padding: 100px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bg-audio" loop src="audio/track.mp3" preload="auto"></audio>
+
+<button class="audio-btn" id="audio-btn" title="Звук">
+  <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+  <svg id="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+</button>
+
+<script>
+  const audio = document.getElementById('bg-audio');
+  const btn   = document.getElementById('audio-btn');
+  const play  = document.getElementById('icon-play');
+  const pause = document.getElementById('icon-pause');
+  let started = false;
+
+  function startAudio() {
+    if (started) return;
+    started = true;
+    audio.volume = 0.5;
+    audio.play();
+    play.style.display  = 'none';
+    pause.style.display = '';
+  }
+
+  document.addEventListener('click', startAudio, { once: true });
+  document.addEventListener('touchstart', startAudio, { once: true });
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!started) { startAudio(); return; }
+    if (audio.paused) {
+      audio.play();
+      play.style.display  = 'none';
+      pause.style.display = '';
+    } else {
+      audio.pause();
+      play.style.display  = '';
+      pause.style.display = 'none';
+    }
+  });
+</script>
+
+
+<!-- ═══════════════════════════════════ HERO ══ -->
+<section class="hero" style="background-image:url('images/hero.jpg')">
+
+  <div class="wrap hero-content">
+    <div style="display:flex;justify-content:flex-end;">
+      <span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.85);">Конфиденциально</span>
+    </div>
+    <div>
+      <span class="label" style="font-size:13px;margin-bottom:20px;">Точка Счастья · Режиссёрский питч</span>
+      <div style="height:0.5px;background:rgba(255,255,255,0.14);margin-bottom:32px;"></div>
+      <p class="hero-phrase">Метод, через который мы строим живой мир.</p>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-line"></div>
+    <span>Листай</span>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════ 01 · МЕХАНИКА ══ -->
+<section class="sec alt" id="mechanics" style="background-image:url('images/01-mechanics.jpg')">
+  <div class="sec-overlay"></div>
+
+  <div class="wrap sec-inner">
+    <div class="sec-head">
+      <span class="label">01 · Механика шоу</span>
+      <h2>Шоу не показывают.<br>В шоу попадают.</h2>
+      <p class="thesis">
+        Ребёнок не садится в зал — он переступает порог. Внутри он не наблюдатель,
+        а герой — у него есть дело, от которого зависит финал.
+        Действие не идёт мимо него — оно идёт сквозь него.
+      </p>
+    </div>
+
+    <div class="grid2">
+
+      <div>
+        <span class="sub-lbl">Порог</span>
+        <p>Тему сказали заранее — больше ни одного объяснения. Дверь закрывается за спиной. Свет гаснет. В воздухе — другой запах, другая температура, другой звук. На пороге ребёнку дают знак — предмет, слово, взгляд, — который отличает его от того, кем он вошёл. Теперь его здесь ждут. Первая минута решает всё: тело узнаёт, что это другой мир, раньше, чем голова успевает спросить.</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Место</span>
+        <p>Это не декорация. Это квартира, в которой живут. Это изба, в которой топят. Стены настоящие на ощупь, окна смотрят наружу — и снаружи идёт снег, горит пожар, садится солнце. Пространство сложное — его хочется изучать. А что там за дверью? А куда ведёт лестница? Ребёнок находит в этом мире себя без объяснений.</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Действие</span>
+        <p>У каждого — своя точка зрения. Актёр подходит, смотрит в глаза, называет по имени, даёт в руки предмет. В этот момент есть только он и ребёнок. За час у каждого случится свой эпизод, которого не было ни у кого другого.<br><br>Герою нужна помощь. Дети — те, без кого он не справится. Каждое действие ощущается как их собственная догадка. Из неё ребёнок уносит то, что сделал своими руками.</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Память</span>
+        <p>Шоу заканчивается. Опыт — нет. Каждый ребёнок уносит своё — найденный предмет, услышанное только им слово, лицо актёра, который смотрел только на него. После — дети собирают единую картину разговором. История живёт неделями.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════ 02 · ИСТОРИЯ ══ -->
+<section class="sec" id="story" style="background-image:url('images/02-story.jpg')">
+  <div class="sec-overlay"></div>
+
+  <div class="wrap sec-inner">
+    <div class="sec-head">
+      <span class="label">02 · История</span>
+      <h2>Путь, по которому идут<br>вместе герой и ребёнок.</h2>
+      <p class="thesis">
+        История в иммерсиве — не текст, который рассказывают, и не сцена, которую играют.
+        Выбор возрастной группы — это драматургическое решение, которое делается на уровне замысла.
+      </p>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <span class="sub-lbl">Каркас</span>
+      <p>Три акта — завязка, развитие с точкой слома, финал — несущая конструкция. Без неё эпизоды рассыпаются в цепочку впечатлений, а шоу превращается в аттракцион. Три акта дают напряжение. Эпизоды держат внимание. Миссия даёт смысл. Матрёшка из трёх уровней, которые работают одновременно.</p>
+    </div>
+
+    <div class="sub">
+      <span class="sub-lbl">Два героя</span>
+      <p>Герой истории и ребёнок, который ему помогает. Герой несёт конфликт — ему плохо, он в беде, он чего-то лишился. Ребёнок несёт действие — он решает, он находит, он помогает. Без героя ребёнку некому помогать. Без ребёнка герою некому подать руку. Вместе они превращают час двадцать в совместно прожитую историю.</p>
+    </div>
+
+    <div class="sub">
+      <span class="sub-lbl">Выбор</span>
+      <p>Ребёнок становится соавтором истории в тот момент, когда принимает решение с последствиями. Не угадывает правильный вариант — а выбирает между двумя правдами, зная, что за каждой своя цена. Фальшивый выбор дети распознают мгновенно. При разработке точек выбора мы привлекаем детского психолога как консультанта.</p>
+    </div>
+
+    <div class="sub">
+      <span class="sub-lbl">Дыхание</span>
+      <p>Темп — это чередование. Напряжение и пауза. Громкое и тихое. Тревога и смех. Ребёнок не может 80 минут быть в пике. История дышит: вдох — выдох, сжатие — расслабление. Мастер-классы в этом ритме — не пауза, а смена регистра. Руки заняты, голова отдыхает, сердце включено.</p>
+    </div>
+
+    <div class="sub">
+      <span class="sub-lbl">Ремесло в истории</span>
+      <p>Мастер-класс работает, когда он — не упражнение рядом с историей, а шаг истории. Не «сейчас мы научимся печь калач, а потом продолжим» — а «бабушка замерзает, её нужно накормить, и мы замешиваем тесто, потому что это единственный способ ей помочь».<br><br>Калач — не упражнение, калач — спасение. Бусина — не поделка, бусина — ключ. Когда мастер-класс встроен в драматургию, образовательная функция работает сама.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════ 03 · ПРОСТРАНСТВО ══ -->
+<section class="sec alt" id="space" style="background-image:url('images/03-space.jpg')">
+  <div class="sec-overlay"></div>
+
+  <div class="wrap sec-inner">
+    <div class="sec-head">
+      <span class="label">03 · Пространство</span>
+      <h2>Пространство — не фон истории.<br>Пространство — её действующее лицо.</h2>
+      <p class="thesis">
+        Музей — витрина за стеклом. Театр — сцена за рампой. Иммерсив — вход внутрь.
+        Оно живёт, меняется, действует — на тело и на сердце.
+      </p>
+    </div>
+
+    <div class="grid2">
+
+      <div>
+        <span class="sub-lbl">Живое</span>
+        <p>Пространство населено. В нём живут, а не экспонируют. Шкаф открывается. Замок работает. Дневник можно прочитать. Ребёнок касается стены — и поверхность отвечает: она тёплая или холодная, шершавая или гладкая. Всё в этом мире работает по правилам этого мира: если есть лампа — она горит; если есть окно — за ним что-то происходит.</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Сложное</span>
+        <p>Плоское пространство скучно. Ребёнок окидывает его взглядом — и смотреть больше некуда. Сложное держит внимание весь час — и дело не в площади, а в геометрии. Угол, ниша, занавес, приоткрытая дверь — достаточно мелких архитектурных жестов, чтобы возникло «а что там дальше?».</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Меняющееся</span>
+        <p>Пространство — инструмент жанра. Путешествие во времени: эпоха меняется на месте. Свет гаснет, раздаётся гул, сквозняк и вспышка — а когда становится видно, мир уже другой. Стены переворачиваются под прикрытием темноты и звука. Дети не переходили в другую комнату — эпоха пришла к ним сама.</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Проницаемое</span>
+        <p>Окна — не декор. За стеклом живёт мир. Снег идёт. Закат догорает. Пожар отражается на стенах. Бомбардировщик проходит над крышей. Проницаемое пространство снимает ощущение замкнутости: ребёнок не в декорации — он в мире, у которого есть горизонт.</p>
+      </div>
+
+    </div>
+
+    <p style="margin-top:60px;font-size:14px;color:rgba(255,255,255,.38);font-style:italic;">
+      Живое, сложное, меняющееся, проницаемое. Четыре свойства — одна задача: чтобы ребёнок,
+      выходя, не думал «это было красиво сделано», а думал «я там был».
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════ 04 · ПРОИЗВОДСТВО ══ -->
+<section class="sec" id="production" style="background-image:url('images/04-production.jpg')">
+  <div class="sec-overlay"></div>
+
+  <div class="wrap sec-inner">
+    <div class="sec-head">
+      <span class="label">04 · Производство</span>
+      <h2>Четыре инструмента,<br>которые доделывают мир до правды.</h2>
+      <p class="thesis">
+        Декорация и реквизит — основа мира. Здесь — о двух языках, которые превращают
+        пространство в атмосферу, и о костюме, который эту атмосферу доносит до ребёнка вплотную.
+      </p>
+    </div>
+
+    <div class="grid2">
+
+      <div>
+        <span class="sub-lbl">Свет</span>
+        <p>Свет — не освещение. Свет — драматургия. Он ведёт внимание, давит, отпускает, открывает и прячет. Задаёт время суток и эпоху: одно и то же окно может быть утром, полуднем и пожаром. Свет умеет стать героем — когда в темноте остаётся одна свеча. И умеет исчезнуть — когда нужна только тень.</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Звук</span>
+        <p>Звук — не саундтрек. Звук — среда. Он населяет пространство: в одной комнате тикают часы, в другой кипит чайник, в третьей слышен далёкий колокол. Звук ведёт — уводит за угол, зовёт к двери. Отдельный инструмент — тишина: когда всё замолкает одновременно, ребёнок слышит собственное сердце.</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Костюм</span>
+        <p>При личном контакте костюм виден с расстояния ладони. Ребёнок смотрит в лицо, но видит и воротник, и пуговицы, и пятно на рукаве. Не «историческая точность» в общем — убедительность вблизи: фактура ткани, износ, пошив, след эпохи. Чем правдивее собран мир, тем легче в него поверить.</p>
+      </div>
+
+      <div>
+        <span class="sub-lbl">Чувства</span>
+        <p>Поверх света, звука и костюма работает ещё один слой — запах, температура, прикосновение. Запах печи и дыма. Холод, от которого садится голос. Ветер, мокрые щёки, вибрация под ногами. Там, где у других зрителей только впечатление, у нашего остаётся телесная память.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════ 05 · АКТЁРЫ ══ -->
+<section class="sec alt" id="actors" style="background-image:url('images/05-actors.jpg')">
+  <div class="sec-overlay"></div>
+
+  <div class="wrap sec-inner">
+    <div class="sec-head">
+      <span class="label">05 · Актёры</span>
+      <h2>В иммерсиве актёра видно близко.<br>Ребёнок смотрит ему в глаза.</h2>
+      <p class="thesis">
+        Здесь не спрячешься за светом, костюмом или выгодным ракурсом — либо ты правдив,
+        либо всё рассыпается. Иммерсив — не театр и не кино. Но актёрская правда нам нужна их уровня.
+      </p>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <span class="sub-lbl">Природа</span>
+      <p>Пластика, голос, взгляд. Как человек двигается, когда думает. Как молчит, когда надо. Как смотрит — и ребёнок понимает, что его видят. Этому не учат. Это либо есть — либо нет. Наша задача — найти тех, у кого есть.</p>
+    </div>
+
+    <div class="sub">
+      <span class="sub-lbl">Прожить, а не показать</span>
+      <p>Нам нужен актёр, который работает изнутри. Его герой может кричать, звать, злиться, плакать — всё это идёт из роли, а не для зала. Не «я делаю вам интересно», а «со мной происходит». Ребёнок должен поверить, что герою правда плохо. Без этой веры иммерсив теряет правду — остаётся праздник с костюмами.</p>
+    </div>
+
+    <div class="sub">
+      <span class="sub-lbl">Контакт с ребёнком</span>
+      <p>Хороший иммерсивный актёр — как Питер Пэн. С ним не страшно пойти за угол, открыть шкаф, переступить порог в темноту — потому что рядом он, и с ним всё возможно. Он — проводник. Не учитель, не аниматор, не ведущий. Для этого нужно два редких таланта разом: любить детей и слышать их. Одно без другого не работает.</p>
+    </div>
+
+    <p style="margin-top:60px;font-size:13px;color:rgba(255,255,255,.35);">
+      Театр играется со сцены. Кино снимается через кадр. Иммерсив случается с ребёнком в мире,
+      куда он попал. И всё, что работает в театре и кино на правду, работает и здесь —
+      только ближе и без второго дубля.<br><br>
+      Кастинг ведёт кастинг-директор под задачу проекта.
+    </p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════ 06 · РЕФЕРЕНСЫ ══ -->
+<section class="sec" id="references" style="background-image:url('images/06-references.jpg')">
+  <div class="sec-overlay"></div>
+
+  <div class="wrap sec-inner">
+    <div class="sec-head">
+      <span class="label">06 · Референсы</span>
+      <h2>Метод, который уже работает<br>в мировой практике.</h2>
+      <p class="thesis">
+        Всё, о чём мы говорили в блоках 01–05 — не наша фантазия.
+        Ниже — три проекта, на которые мы опираемся. Каждый решает свою задачу, и каждый важен.
+      </p>
+    </div>
+
+    <div style="margin-top:52px;">
+
+      <div class="ref-card">
+        <div class="ref-head">
+          <h3>Punchdrunk Enrichment</h3>
+          <span class="ref-meta">Великобритания · с 2008</span>
+        </div>
+        <p style="font-size:14px;">Благотворительная организация, выросшая из легендарной иммерсивной компании Punchdrunk. За 17 лет — десятки тысяч школьников Великобритании, Австралии и Шотландии. Их главный проект — магическая библиотека, которая появляется в школе на несколько дней. Дети становятся учениками писателей, помогают героям, пишут собственные истории внутри разворачивающегося нарратива.</p>
+        <blockquote>
+          «Помещая учеников внутрь вымышленного мира, превращая их в персонажей истории, так чтобы их действия становились неотъемлемой частью развития сюжета.»
+          <cite>Dr Angela Colvert</cite>
+        </blockquote>
+        <div class="ref-lbl">Что берём</div>
+        <ul class="take-list">
+          <li>Touch-real декорация — мир, в который можно войти и к которому можно прикоснуться</li>
+          <li>Техника личного контакта актёра с ребёнком</li>
+          <li>Immersive learning — знание приходит через действие, а не через объяснение</li>
+        </ul>
+        <a class="ref-link" href="https://www.punchdrunkenrichment.org.uk" target="_blank">punchdrunkenrichment.org.uk ↗</a>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-head">
+          <h3>War of the Worlds Immersive</h3>
+          <span class="ref-meta">Лондон · Layered Reality · с 2019</span>
+        </div>
+        <p style="font-size:14px;">1 час 50 минут. 24 интерактивные сцены: живые актёры, кино, виртуальная реальность и мультисенсорные эффекты — жар, ветер, вибрация, запах. 15 наград, включая Thea Award — «Оскар» иммерсивной индустрии. Guinness World Record как самое долго идущее иммерсивное театральное шоу в мире.</p>
+        <blockquote>
+          «Это не просто театр. Живые актёры, декорации кинематографического качества, виртуальная реальность и мультисенсорные эффекты, сплетённые в опыт, которого вы никогда не переживали.»
+          <cite>Layered Reality</cite>
+        </blockquote>
+        <div class="ref-lbl">Что берём</div>
+        <ul class="take-list">
+          <li>Мультисенсорная среда — запах, температура, вибрация как часть драматургии</li>
+          <li>Масштаб: когда пространство и эффекты работают вместе, рождается эффект реального присутствия</li>
+          <li>Сочетание живых актёров и технологий в одной сцене</li>
+        </ul>
+        <a class="ref-link" href="https://www.thewaroftheworldsimmersive.com" target="_blank">thewaroftheworldsimmersive.com ↗</a>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-head">
+          <h3>Bridge Command</h3>
+          <span class="ref-meta">Лондон · Parabolic Theatre</span>
+        </div>
+        <p style="font-size:14px;">Зрители становятся экипажем звёздного корабля. Команда получает миссию — военную, дипломатическую, исследовательскую — и в реальном времени управляет её ходом. Решения группы меняют результат, и каждое шоу проходит иначе. Критики пишут об «осмысленном ощущении агентности» — ключевом качестве, которое редко удаётся в иммерсивах.</p>
+        <blockquote>
+          «Ваш выбор управляет миссией, и каждое решение формирует историю, которая уникальна для вас.»
+          <cite>Parabolic Theatre</cite>
+        </blockquote>
+        <div class="ref-lbl">Что берём</div>
+        <ul class="take-list">
+          <li>Агентность: зритель не наблюдает историю, а ведёт её своими решениями</li>
+          <li>Принцип миссии — дело, которое собирает группу и даёт смысл каждому эпизоду</li>
+          <li>Настоящий выбор с последствиями — когда решение ребёнка меняет ход истории</li>
+        </ul>
+        <a class="ref-link" href="https://bridgecommand.space" target="_blank">bridgecommand.space ↗</a>
+      </div>
+
+    </div>
+
+    <p style="margin-top:60px;font-size:13px;color:rgba(255,255,255,.35);">
+      Три разных проекта — три грани одного метода. Punchdrunk показывает, как это работает
+      с детьми. War of the Worlds — на каком уровне чувственного погружения это возможно.
+      Bridge Command — как превратить зрителя в автора истории.<br><br>
+      Мы не копируем ни один из них. Мы работаем внутри того же поля.
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════ ФИНАЛ ══ -->
+<section class="final" style="background-image:url('images/final.jpg')">
+  <div class="sec-overlay"></div>
+  <div class="wrap" style="position:relative;z-index:1;">
+    <span class="gold-rule"></span>
+    <p class="final-quote">
+      Шоу, о которых потом говорят годами, строятся не из сцен,
+      а из мира, в который поверили.
+    </p>
+    <p class="final-attr">Точка Счастья · 2026</p>
+    <p style="margin-top:52px;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.85);">Конфиденциально</p>
+    <div class="final-contacts">
+      <a href="tel:+79031551405">+7 (903) 155-14-05</a>
+      <a href="mailto:artozdirector@gmail.com">artozdirector@gmail.com</a>
+      <a href="https://t.me/ARTREC8" target="_blank">@ARTREC8</a>
+    </div>
+  </div>
+</section>
+
+
+</body>
+</html>
